@@ -82,3 +82,33 @@ class UpdateBoardRequest:
             contents=self.contents,
             password=self.password,
         )
+
+
+class DeleteBoardSchema(BaseModel):
+    id: int = None
+    password: str = None
+
+
+class DeleteBoardRequest:
+    def __init__(self, password):
+        self.id = id
+        self.password = password
+
+    def validate_request_and_make_dto(self):
+        try:
+            UpdateBoardSchema(
+                id=self.id,
+                password=self.password,
+            )
+            return self.to_dto()
+        except ValidationError as e:
+            logger.error(
+                f"[DeleteBoardRequest][validate_request_and_make_dto] error : {e}"
+            )
+            return False
+
+    def to_dto(self) -> DeleteBoardDto:
+        return DeleteBoardDto(
+            id=self.id,
+            password=self.password,
+        )

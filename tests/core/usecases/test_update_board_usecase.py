@@ -18,9 +18,7 @@ def test_update_board_then_success(session):
     contents = "test_contents_2"
     password = "test_password"
 
-    dto = UpdateBoardDto(
-       id = id, title=title, contents=contents, password=password
-    )
+    dto = UpdateBoardDto(id=id, title=title, contents=contents, password=password)
 
     usecase = UpdateBoardUseCase()
 
@@ -39,9 +37,7 @@ def test_when_update_board_with_wrong_params_then_fail(session):
     id = 1
     password = "test_password"
 
-    dto = UpdateBoardDto(
-        id=id, password=password
-    )
+    dto = UpdateBoardDto(id=id, password=password)
 
     usecase = UpdateBoardUseCase()
 
@@ -62,9 +58,7 @@ def test_when_update_board_with_wrong_password_then_fail(session):
     contents = "test_contents_2"
     password = "1"
 
-    dto = UpdateBoardDto(
-        id=id, title=title, contents=contents, password=password
-    )
+    dto = UpdateBoardDto(id=id, title=title, contents=contents, password=password)
 
     usecase = UpdateBoardUseCase()
 

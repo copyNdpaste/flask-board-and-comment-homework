@@ -32,3 +32,16 @@ class UpdateBoardPresenter:
             return success_response(result=result)
         elif isinstance(output, UseCaseFailureOutput):
             return failure_response(output=output)
+
+
+class DeleteBoardPresenter:
+    def transform(self, output: Union[UseCaseSuccessOutput, UseCaseFailureOutput]):
+        if isinstance(output, UseCaseSuccessOutput):
+            value = output.value
+            result = {
+                "data": value,
+                "meta": output.meta,
+            }
+            return success_response(result=result)
+        elif isinstance(output, UseCaseFailureOutput):
+            return failure_response(output=output)
