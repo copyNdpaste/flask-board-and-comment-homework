@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 
 class CreateBoardDto(BaseModel):
-    id: int = None
     title: str = None
     contents: str = None
     writer: str = None
