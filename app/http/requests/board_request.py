@@ -44,3 +44,41 @@ class CreateBoardRequest:
             writer=self.writer,
             password=self.password,
         )
+
+
+class UpdateBoardSchema(BaseModel):
+    id: int = None
+    title: str = None
+    contents: str = None
+    password: str = None
+
+
+class UpdateBoardRequest:
+    def __init__(self, title, contents, password):
+        self.id = id
+        self.title = title
+        self.contents = contents
+        self.password = password
+
+    def validate_request_and_make_dto(self):
+        try:
+            UpdateBoardSchema(
+                id=self.id,
+                title=self.title,
+                contents=self.contents,
+                password=self.password,
+            )
+            return self.to_dto()
+        except ValidationError as e:
+            logger.error(
+                f"[UpdateBoardRequest][validate_request_and_make_dto] error : {e}"
+            )
+            return False
+
+    def to_dto(self) -> UpdateBoardDto:
+        return UpdateBoardDto(
+            id=self.id,
+            title=self.title,
+            contents=self.contents,
+            password=self.password,
+        )

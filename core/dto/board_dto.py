@@ -12,6 +12,7 @@ class UpdateBoardDto(BaseModel):
     id: int = None
     title: str = None
     contents: str = None
+    password: str = None
 
 
 class DeleteBoardDto(BaseModel):
