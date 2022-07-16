@@ -16,7 +16,7 @@ class CreateBoardSchema(BaseModel):
 
 
 class CreateBoardRequest:
-    def __init__(self, title, contents,writer,password):
+    def __init__(self, title, contents, writer, password):
         self.title = title
         self.contents = contents
         self.writer = writer
