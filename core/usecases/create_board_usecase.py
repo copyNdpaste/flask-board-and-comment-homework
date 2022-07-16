@@ -21,6 +21,8 @@ class CreateBoardUseCase:
                 FailureType.INVALID_REQUEST_ERROR, "please check input values"
             )
 
-        self.repo.create_board(dto.title, dto.writer, dto.contents, dto.password)
+        is_created = self.repo.create_board(dto.title, dto.writer, dto.contents, dto.password)
+        if not is_created:
+            return UseCaseFailureOutput(FailureType.INTERNAL_ERROR, "create board fail")
 
         return UseCaseSuccessOutput(value=True)
