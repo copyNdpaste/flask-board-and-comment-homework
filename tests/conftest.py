@@ -6,6 +6,7 @@ from sqlalchemy.orm import scoped_session
 
 from app import create_app
 from app.extensions.database import db as _db
+from core.repository.repository import Repository
 
 
 @pytest.fixture(scope="session")
@@ -70,3 +71,18 @@ def session(db: SQLAlchemy) -> scoped_session:
     transaction.rollback()
     connection.close()
     session.remove()
+
+
+@pytest.fixture()
+def create_boards(session):
+    def _create_boards(n, writer):
+        for i in range(1, n + 1):
+            title = "test_title" + str(i)
+            contents = "test_contents" + str(i)
+            password = "test_password"
+
+            Repository().create_board(
+                title=title, writer=writer, contents=contents, password=password
+            )
+
+    return _create_boards

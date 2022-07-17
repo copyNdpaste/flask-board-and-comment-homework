@@ -4,18 +4,21 @@ from app.http.requests.board_request import (
     CreateBoardRequest,
     UpdateBoardRequest,
     DeleteBoardRequest,
+    GetBoardsRequest,
 )
 from app.http.responses import failure_response
 from app.http.responses.presenters.board_presenter import (
     CreateBoardPresenter,
     UpdateBoardPresenter,
     DeleteBoardPresenter,
+    GetBoardsPresenter,
 )
 from app.http.view import api
 
 from core.usecases.create_board_usecase import CreateBoardUseCase
 from core.usecase_output import UseCaseFailureOutput, FailureType
 from core.usecases.delete_board_usecase import DeleteBoardUseCase
+from core.usecases.get_boards_usecase import GetBoardsUseCase
 from core.usecases.update_board_usecase import UpdateBoardUseCase
 
 
@@ -28,6 +31,17 @@ def create_board_view():
         )
 
     return CreateBoardPresenter().transform(CreateBoardUseCase().execute(dto=dto))
+
+
+@api.route("/boards", methods=["GET"])
+def get_boards_view():
+    dto = GetBoardsRequest(**request.get_json()).validate_request_and_make_dto()
+    if not dto:
+        return failure_response(
+            UseCaseFailureOutput(type=FailureType.INVALID_REQUEST_ERROR)
+        )
+
+    return GetBoardsPresenter().transform(GetBoardsUseCase().execute(dto=dto))
 
 
 @api.route("/board", methods=["PUT"])

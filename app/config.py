@@ -2,8 +2,6 @@ import os
 
 
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "elysia"
-    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY") or "elysia"
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
@@ -15,9 +13,7 @@ class LocalConfig(Config):
     os.environ["FLASK_ENV"] = "local"
     SQLALCHEMY_ECHO = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = (
-        "postgresql+psycopg2://postgres:password@localhost:5432/elysia"
-    )
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:root@localhost:3306/wanted"
 
 
 class TestConfig(Config):

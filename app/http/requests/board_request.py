@@ -1,9 +1,16 @@
+from typing import Optional
+
 from pydantic import ValidationError
 from pydantic import BaseModel
 
 from app.extensions.utils.log_helper import logger_
 
-from core.dto.board_dto import CreateBoardDto, UpdateBoardDto, DeleteBoardDto
+from core.dto.board_dto import (
+    CreateBoardDto,
+    UpdateBoardDto,
+    DeleteBoardDto,
+    GetBoardsDto,
+)
 
 logger = logger_.getLogger(__name__)
 
@@ -46,6 +53,40 @@ class CreateBoardRequest:
         )
 
 
+class GetBoardsSchema(BaseModel):
+    id: Optional[int] = None
+    title: Optional[str] = None
+    writer: Optional[str] = None
+
+
+class GetBoardsRequest:
+    def __init__(self, id, title, writer):
+        self.id = id
+        self.title = title
+        self.writer = writer
+
+    def validate_request_and_make_dto(self):
+        try:
+            GetBoardsSchema(
+                id=self.id,
+                title=self.title,
+                writer=self.writer,
+            )
+            return self.to_dto()
+        except ValidationError as e:
+            logger.error(
+                f"[GetBoardsRequest][validate_request_and_make_dto] error : {e}"
+            )
+            return False
+
+    def to_dto(self) -> GetBoardsDto:
+        return GetBoardsDto(
+            id=self.id,
+            title=self.title,
+            writer=self.writer,
+        )
+
+
 class UpdateBoardSchema(BaseModel):
     id: int = None
     title: str = None
@@ -54,7 +95,7 @@ class UpdateBoardSchema(BaseModel):
 
 
 class UpdateBoardRequest:
-    def __init__(self, title, contents, password):
+    def __init__(self, id, title, contents, password):
         self.id = id
         self.title = title
         self.contents = contents

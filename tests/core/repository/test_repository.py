@@ -59,3 +59,79 @@ def test_delete_board_then_success(session):
     result = Repository().get_board(id)
 
     assert result == None
+
+
+def test_get_boards_by_writer_when_board_is_1_then_success(session, create_boards):
+    writer = "test_writer"
+    create_boards(1, writer)
+
+    boards = Repository().get_boards(None, writer, None)
+
+    assert boards[0].id == 1
+    assert boards[0].title == "test_title1"
+
+
+def test_get_boards_by_writer_when_board_is_11_then_success(session, create_boards):
+    writer = "test_writer"
+    create_boards(11, writer)
+
+    boards = Repository().get_boards(None, writer, None)
+
+    assert boards[0].id == 11
+    assert boards[0].title == "test_title11"
+
+    assert boards[9].id == 2
+    assert boards[9].title == "test_title2"
+
+
+def test_get_boards_by_writer_when_board_is_21_and_id_is_12_then_success(
+    session, create_boards
+):
+    writer = "test_writer"
+    create_boards(21, writer)
+
+    boards = Repository().get_boards(11, writer, None)
+
+    assert boards[0].id == 11
+    assert boards[0].title == "test_title11"
+
+    assert boards[9].id == 2
+    assert boards[9].title == "test_title2"
+
+
+def test_get_boards_by_title_when_board_is_1_then_success(session, create_boards):
+    writer = "test_writer"
+    create_boards(1, writer)
+
+    boards = Repository().get_boards(None, None, "test_title")
+
+    assert boards[0].id == 1
+    assert boards[0].title == "test_title1"
+
+
+def test_get_boards_by_title_when_board_is_11_then_success(session, create_boards):
+    writer = "test_writer"
+    create_boards(11, writer)
+
+    boards = Repository().get_boards(None, None, "test_title")
+
+    assert boards[0].id == 11
+    assert boards[0].title == "test_title11"
+
+    assert boards[9].id == 2
+    assert boards[9].title == "test_title2"
+
+
+def test_get_boards_by_title_when_board_is_21_and_id_is_12_then_success(
+    session, create_boards
+):
+    writer = "test_writer"
+    create_boards(21, writer)
+
+    boards = Repository().get_boards(11, None, "test_title")
+
+    assert boards[0].id == 11
+    assert boards[0].title == "test_title11"
+
+    assert boards[9].id == 2
+    assert boards[9].title == "test_title2"

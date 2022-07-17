@@ -17,7 +17,7 @@ class UpdateBoardUseCase:
                 FailureType.UNAUTHORIZED_ERROR, "please check password"
             )
 
-        if dto.title == None and dto.contents == None:
+        if dto.title == '' or dto.contents == '':
             return UseCaseFailureOutput(
                 FailureType.INVALID_REQUEST_ERROR, "please check input values"
             )

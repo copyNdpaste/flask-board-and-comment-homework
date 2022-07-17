@@ -15,8 +15,8 @@ class BoardModel(db.Model):
 
     id = Column(Integer(), primary_key=True)
     title = Column(String(50), index=True, nullable=False)
-    contents = Column(String(), nullable=False)
-    writer = Column(String(30), unique=True, nullable=False)
+    contents = Column(String(10000), nullable=False)
+    writer = Column(String(30), nullable=False)
     password = Column(String(10), nullable=False)
     created_at = Column(String(10), default=get_utc_timestamp(), nullable=False)
     updated_at = Column(String(10), default=get_utc_timestamp(), nullable=False)

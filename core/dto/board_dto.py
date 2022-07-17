@@ -8,6 +8,12 @@ class CreateBoardDto(BaseModel):
     password: str = None
 
 
+class GetBoardsDto(BaseModel):
+    id: int = None
+    title: str = None
+    writer: str = None
+
+
 class UpdateBoardDto(BaseModel):
     id: int = None
     title: str = None
