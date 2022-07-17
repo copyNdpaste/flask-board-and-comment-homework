@@ -26,10 +26,7 @@ def upgrade():
         sa.Column("created_at", sa.String(length=30), nullable=False),
         sa.Column("parent_id", sa.Integer(), nullable=True),
         sa.Column("board_id", sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["board_id"],
-            ["boards.id"],
-        ),
+        sa.ForeignKeyConstraint(["board_id"], ["boards.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(
             ["parent_id"],
             ["comments.id"],

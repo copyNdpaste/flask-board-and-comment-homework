@@ -41,11 +41,11 @@ def test_get_comments_when_parent_comment_is_11_and_child_comment_is_11_on_each_
         assert len(result.value[i].child) == 11
 
 
-def test_get_comments_when_comment_is_21_and_id_is_12_then_success(
+def test_get_comments_when_comment_is_21_and_id_is_11_then_success(
     session, create_boards, create_comments
 ):
     writer = "test_writer"
-    id = 12
+    id = 11
     create_boards(1, writer)
     create_comments(21, writer, 1)
     for i in range(1, 22):
@@ -57,6 +57,33 @@ def test_get_comments_when_comment_is_21_and_id_is_12_then_success(
 
     result = usecase.execute(dto=dto)
 
-    assert result.value[0].id == 12
+    assert result.value[0].id == 11
     for i in range(10):
+        assert result.value[i].parent_id is None
         assert len(result.value[i].child) == 2
+        for j in range(len(result.value[i].child)):
+            assert result.value[i].child[j].parent_id is not None
+
+
+def test_get_comments_when_comment_is_21_and_id_is_None_then_success(
+    session, create_boards, create_comments
+):
+    writer = "test_writer"
+    id = None
+    create_boards(1, writer)
+    create_comments(21, writer, 1)
+    for i in range(1, 22):
+        create_comments(2, writer, 1, i)
+
+    dto = GetCommentsDto(id=id, board_id=1)
+
+    usecase = GetCommentsUseCase()
+
+    result = usecase.execute(dto=dto)
+
+    assert result.value[0].id == 1
+    for i in range(10):
+        assert result.value[i].parent_id is None
+        assert len(result.value[i].child) == 2
+        for j in range(len(result.value[i].child)):
+            assert result.value[i].child[j].parent_id is not None

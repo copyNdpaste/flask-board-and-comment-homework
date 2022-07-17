@@ -13,7 +13,7 @@ class GetBoardsUseCase:
     def execute(self, dto: GetBoardsDto):
         boards = self.repo.get_boards(dto.id, dto.writer, dto.title)
 
-        if not boards:
+        if boards is False:
             return UseCaseFailureOutput(FailureType.INTERNAL_ERROR, "get boards fail")
 
         return UseCaseSuccessOutput(

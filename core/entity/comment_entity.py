@@ -1,8 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-from core.entity.board_entity import BoardEntity
-
 
 class CommentEntity(BaseModel):
     id: int = None

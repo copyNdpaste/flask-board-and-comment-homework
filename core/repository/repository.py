@@ -71,7 +71,6 @@ class Repository:
             return [board.to_entity() for board in boards] if boards else []
         except Exception as e:
             logger.error(f"[Repository][get_board] error : {e}")
-            session.rollback()
             return False
 
     def update_board(self, id, title, contents) -> bool:
@@ -126,7 +125,7 @@ class Repository:
             return False
 
     def get_comments(self, id, board_id) -> Union[list[CommentEntity], bool]:
-        # id는 페이지상의 맨 마지막 게시글 id - 1. 즉, id가 있으면 id부터 조회하면 됨
+        # id는 페이지상의 맨 마지막 게시글 id + 1. 즉, id가 있으면 id부터 조회하면 됨
         # 댓글 10개 선택, child는 있는거 다 붙이기
         try:
             condition = []
@@ -140,20 +139,18 @@ class Repository:
             )
 
             comment_list = []
-            for parent_comment in comments:
-                if parent_comment.child:
-                    pc = parent_comment.to_entity()
+            for comment in comments:
+                if comment.child:
+                    pc = comment.to_entity()
                     pc.child = [
-                        child_comment.to_entity()
-                        for child_comment in parent_comment.child
+                        child_comment.to_entity() for child_comment in comment.child
                     ]
                     comment_list.append(pc)
-                else:
-                    pc = parent_comment.to_entity()
+                elif not comment.parent_id:
+                    pc = comment.to_entity()
                     comment_list.append(pc)
 
             return comment_list
         except Exception as e:
             logger.error(f"[Repository][get_comments] error : {e}")
-            session.rollback()
             return False

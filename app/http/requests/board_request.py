@@ -131,13 +131,13 @@ class DeleteBoardSchema(BaseModel):
 
 
 class DeleteBoardRequest:
-    def __init__(self, password):
+    def __init__(self, id, password):
         self.id = id
         self.password = password
 
     def validate_request_and_make_dto(self):
         try:
-            UpdateBoardSchema(
+            DeleteBoardSchema(
                 id=self.id,
                 password=self.password,
             )

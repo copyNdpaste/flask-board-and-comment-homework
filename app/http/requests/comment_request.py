@@ -56,8 +56,8 @@ class GetCommentsSchema(BaseModel):
 class GetCommentsRequest:
     def __init__(
         self,
-        id,
         board_id,
+        id=None,
     ):
         self.id = id
         self.board_id = board_id

@@ -4,7 +4,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 from app import db
 from app.extensions.utils.time_helper import get_utc_timestamp
@@ -23,7 +23,7 @@ class CommentModel(db.Model):
     board_id = Column(Integer(), ForeignKey(BoardModel.id), nullable=False)
     created_at = Column(String(30), default=get_utc_timestamp(), nullable=False)
 
-    board = relationship("BoardModel", backref="comments")
+    board = relationship("BoardModel", backref=backref("comments", cascade="delete"))
     parent = relationship("CommentModel", remote_side=[id], backref="child")
 
     def to_entity(self) -> CommentEntity:
