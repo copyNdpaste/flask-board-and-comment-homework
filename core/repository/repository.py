@@ -1,13 +1,16 @@
 from typing import Union
 
 from sqlalchemy import and_
+from sqlalchemy.orm import aliased
 
 from app.extensions.database import session
 from app.extensions.utils.log_helper import logger_
 from app.extensions.utils.time_helper import get_utc_timestamp
 from app.persistence.model.board_model import BoardModel
+from app.persistence.model.comment_model import CommentModel
 
 from core.entity.board_entity import BoardEntity
+from core.entity.comment_entity import CommentEntity
 
 logger = logger_.getLogger(__name__)
 
@@ -99,5 +102,56 @@ class Repository:
             return True
         except Exception as e:
             logger.error(f"[Repository][delete_board] error : {e}")
+            session.rollback()
+            return False
+
+    def create_comment(
+        self,
+        board_id,
+        writer,
+        contents,
+        parent_id=None,
+    ) -> Union[CommentEntity, bool]:
+        try:
+            comment = CommentModel(
+                board_id=board_id, writer=writer, contents=contents, parent_id=parent_id
+            )
+
+            session.add(comment)
+            session.commit()
+
+            return comment.to_entity()
+        except Exception as e:
+            logger.error(f"[Repository][create_comment] error : {e}")
+            session.rollback()
+            return False
+
+    def get_comments(self, id, board_id) -> Union[list[CommentEntity], bool]:
+        # id는 페이지상의 맨 마지막 게시글 id - 1. 즉, id가 있으면 id부터 조회하면 됨
+        # 댓글 10개 선택, child는 있는거 다 붙이기
+        try:
+            condition = []
+            if id:
+                condition.append((CommentModel.id >= id))
+            if board_id:
+                condition.append(CommentModel.board_id == board_id)
+
+            comments = (
+                session.query(CommentModel).filter(and_(True, *condition)).limit(10)
+            )
+
+            comment_list = []
+            for parent_comment in comments:
+                if not parent_comment.child:
+                    continue
+                pc = parent_comment.to_entity()
+                pc.child = [
+                    child_comment.to_entity() for child_comment in parent_comment.child
+                ]
+                comment_list.append(pc)
+
+            return comment_list
+        except Exception as e:
+            logger.error(f"[Repository][get_comments] error : {e}")
             session.rollback()
             return False

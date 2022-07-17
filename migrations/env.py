@@ -9,6 +9,9 @@ from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
+from app.persistence.model.board_model import BoardModel
+from app.persistence.model.comment_model import CommentModel
+
 config = context.config
 
 # Interpret the config file for Python logging.
@@ -20,6 +23,8 @@ logger = logging.getLogger("alembic.env")
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
+
+
 config.set_main_option(
     "sqlalchemy.url",
     str(current_app.extensions["migrate"].db.get_engine().url).replace("%", "%%"),

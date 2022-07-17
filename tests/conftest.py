@@ -86,3 +86,16 @@ def create_boards(session):
             )
 
     return _create_boards
+
+
+@pytest.fixture()
+def create_comments(session):
+    def _create_comments(n, writer, board_id, parent_id=None):
+        for i in range(1, n + 1):
+            contents = "test_contents" + str(i)
+
+            Repository().create_comment(
+                contents=contents, board_id=board_id, writer=writer, parent_id=parent_id
+            )
+
+    return _create_comments

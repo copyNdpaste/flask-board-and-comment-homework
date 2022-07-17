@@ -135,3 +135,63 @@ def test_get_boards_by_title_when_board_is_21_and_id_is_12_then_success(
 
     assert boards[9].id == 2
     assert boards[9].title == "test_title2"
+
+
+def test_create_comment_then_success(session, create_boards):
+    writer = "test_writer"
+    create_boards(1, writer)
+
+    contents = "test_contents"
+    writer = "test_writer"
+    board_id = 1
+
+    result = Repository().create_comment(
+        board_id=board_id,
+        writer=writer,
+        contents=contents,
+    )
+
+    assert result.contents == contents
+
+
+def test_get_comments_when_parent_comments_2_child_comments_5_then_success(
+    session, create_boards, create_comments
+):
+    writer = "test_writer"
+    create_boards(1, writer)
+
+    writer = "test_writer"
+    board_id = 1
+
+    create_comments(1, writer, 1)
+    create_comments(1, writer, 1)
+
+    create_comments(5, writer, 1, 1)
+    create_comments(5, writer, 1, 2)
+
+    comments = Repository().get_comments(None, board_id)
+
+    assert comments[0].id == 1
+    assert len(comments[0].child) == 5
+
+    assert comments[1].id == 2
+    assert len(comments[1].child) == 5
+
+
+def test_get_comments_when_parents_comments_1_child_comments_12_then_success(
+    session, create_boards, create_comments
+):
+    writer = "test_writer"
+    create_boards(1, writer)
+
+    writer = "test_writer"
+    board_id = 1
+
+    create_comments(1, writer, 1)
+
+    create_comments(12, writer, 1, 1)
+
+    comments = Repository().get_comments(None, board_id)
+
+    assert comments[0].id == 1
+    assert len(comments[0].child) == 12
