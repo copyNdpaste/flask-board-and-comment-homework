@@ -1,7 +1,6 @@
 from typing import Union
 
 from sqlalchemy import and_
-from sqlalchemy.orm import aliased
 
 from app.extensions.database import session
 from app.extensions.utils.log_helper import logger_
@@ -142,13 +141,16 @@ class Repository:
 
             comment_list = []
             for parent_comment in comments:
-                if not parent_comment.child:
-                    continue
-                pc = parent_comment.to_entity()
-                pc.child = [
-                    child_comment.to_entity() for child_comment in parent_comment.child
-                ]
-                comment_list.append(pc)
+                if parent_comment.child:
+                    pc = parent_comment.to_entity()
+                    pc.child = [
+                        child_comment.to_entity()
+                        for child_comment in parent_comment.child
+                    ]
+                    comment_list.append(pc)
+                else:
+                    pc = parent_comment.to_entity()
+                    comment_list.append(pc)
 
             return comment_list
         except Exception as e:

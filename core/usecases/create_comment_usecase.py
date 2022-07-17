@@ -11,11 +11,7 @@ class CreateCommentUseCase:
         self.repo = repo
 
     def execute(self, dto: CreateCommentDto):
-        if (
-            not dto.writer
-            or not dto.contents
-            or not dto.board_id
-        ):
+        if not dto.writer or not dto.contents or not dto.board_id:
             return UseCaseFailureOutput(
                 FailureType.INVALID_REQUEST_ERROR, "please check input values"
             )
@@ -24,6 +20,8 @@ class CreateCommentUseCase:
             dto.board_id, dto.writer, dto.contents, dto.parent_id
         )
         if not is_created:
-            return UseCaseFailureOutput(FailureType.INTERNAL_ERROR, "create comment fail")
+            return UseCaseFailureOutput(
+                FailureType.INTERNAL_ERROR, "create comment fail"
+            )
 
         return UseCaseSuccessOutput(value=True)

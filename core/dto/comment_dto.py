@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -9,4 +11,5 @@ class CreateCommentDto(BaseModel):
 
 
 class GetCommentsDto(BaseModel):
+    id: Optional[int] = None
     board_id: int = None

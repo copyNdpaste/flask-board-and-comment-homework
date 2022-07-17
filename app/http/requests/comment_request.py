@@ -5,13 +5,7 @@ from pydantic import BaseModel
 
 from app.extensions.utils.log_helper import logger_
 
-from core.dto.board_dto import (
-    CreateBoardDto,
-    UpdateBoardDto,
-    DeleteBoardDto,
-    GetBoardsDto,
-)
-from core.dto.comment_dto import CreateCommentDto
+from core.dto.comment_dto import CreateCommentDto, GetCommentsDto
 
 logger = logger_.getLogger(__name__)
 
@@ -19,12 +13,12 @@ logger = logger_.getLogger(__name__)
 class CreateCommentSchema(BaseModel):
     contents: str = None
     writer: str = None
-    board_id:int=None
-    parent_id:Optional[str]=None
+    board_id: int = None
+    parent_id: Optional[str] = None
 
 
 class CreateCommentRequest:
-    def __init__(self, contents, writer, board_id,parent_id=None):
+    def __init__(self, contents, writer, board_id, parent_id=None):
         self.contents = contents
         self.writer = writer
         self.board_id = board_id
@@ -35,8 +29,8 @@ class CreateCommentRequest:
             CreateCommentSchema(
                 contents=self.contents,
                 writer=self.writer,
-                 board_id=self.board_id,
-             parent_id=self.parent_id
+                board_id=self.board_id,
+                parent_id=self.parent_id,
             )
             return self.to_dto()
         except ValidationError as e:
@@ -50,40 +44,39 @@ class CreateCommentRequest:
             contents=self.contents,
             writer=self.writer,
             board_id=self.board_id,
-            parent_id=self.parent_id
+            parent_id=self.parent_id,
         )
 
 
-class GetBoardsSchema(BaseModel):
+class GetCommentsSchema(BaseModel):
     id: Optional[int] = None
-    title: Optional[str] = None
-    writer: Optional[str] = None
+    board_id: int = None
 
 
-class GetBoardsRequest:
-    def __init__(self, id, title, writer):
+class GetCommentsRequest:
+    def __init__(
+        self,
+        id,
+        board_id,
+    ):
         self.id = id
-        self.title = title
-        self.writer = writer
+        self.board_id = board_id
 
     def validate_request_and_make_dto(self):
         try:
-            GetBoardsSchema(
+            GetCommentsSchema(
                 id=self.id,
-                title=self.title,
-                writer=self.writer,
+                board_id=self.board_id,
             )
             return self.to_dto()
         except ValidationError as e:
             logger.error(
-                f"[GetBoardsRequest][validate_request_and_make_dto] error : {e}"
+                f"[GetCommentsRequest][validate_request_and_make_dto] error : {e}"
             )
             return False
 
-    def to_dto(self) -> GetBoardsDto:
-        return GetBoardsDto(
+    def to_dto(self) -> GetCommentsDto:
+        return GetCommentsDto(
             id=self.id,
-            title=self.title,
-            writer=self.writer,
+            board_id=self.board_id,
         )
-

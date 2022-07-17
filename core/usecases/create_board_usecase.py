@@ -11,12 +11,7 @@ class CreateBoardUseCase:
         self.repo = repo
 
     def execute(self, dto: CreateBoardDto):
-        if (
-            not dto.title
-            or not dto.writer
-            or not dto.contents
-            or not dto.password
-        ):
+        if not dto.title or not dto.writer or not dto.contents or not dto.password:
             return UseCaseFailureOutput(
                 FailureType.INVALID_REQUEST_ERROR, "please check input values"
             )
