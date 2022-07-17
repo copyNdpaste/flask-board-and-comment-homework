@@ -7,6 +7,7 @@ from app.extensions.utils.log_helper import logger_
 from app.extensions.utils.time_helper import get_utc_timestamp
 from app.persistence.model.board_model import BoardModel
 from app.persistence.model.comment_model import CommentModel
+from app.persistence.model.keyword_model import KeywordModel
 
 from core.entity.board_entity import BoardEntity
 from core.entity.comment_entity import CommentEntity
@@ -153,4 +154,26 @@ class Repository:
             return comment_list
         except Exception as e:
             logger.error(f"[Repository][get_comments] error : {e}")
+            return False
+
+    def get_keywords(self):
+        try:
+            keywords = session.query(KeywordModel).all()
+
+            return [keyword.to_entity() for keyword in keywords] if keywords else []
+        except Exception as e:
+            logger.error(f"[Repository][get_keywords] error : {e}")
+            return False
+
+    def create_keyword(self, writer, keyword):
+        try:
+            keyword = KeywordModel(writer=writer, keyword=keyword)
+
+            session.add(keyword)
+            session.commit()
+
+            return keyword.to_entity()
+        except Exception as e:
+            logger.error(f"[Repository][create_keywords] error : {e}")
+            session.rollback()
             return False

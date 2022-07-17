@@ -11,6 +11,7 @@ from alembic import context
 # access to the values within the .ini file in use.
 from app.persistence.model.board_model import BoardModel
 from app.persistence.model.comment_model import CommentModel
+from app.persistence.model.keyword_model import KeywordModel
 
 config = context.config
 

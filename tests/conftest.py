@@ -99,3 +99,14 @@ def create_comments(session):
             )
 
     return _create_comments
+
+
+@pytest.fixture()
+def create_keywords(session):
+    def _create_keywords(n, writer):
+        for i in range(1, n + 1):
+            keyword = str(i)
+
+            Repository().create_keyword(writer=writer, keyword=keyword)
+
+    return _create_keywords

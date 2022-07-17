@@ -1,5 +1,6 @@
 import inject
 
+from app.extensions.utils.notification_helper import notify_keyword_contents
 from core.dto.board_dto import CreateBoardDto
 from core.repository.repository import Repository
 from core.usecase_output import UseCaseSuccessOutput, UseCaseFailureOutput, FailureType
@@ -16,10 +17,12 @@ class CreateBoardUseCase:
                 FailureType.INVALID_REQUEST_ERROR, "please check input values"
             )
 
-        is_created = self.repo.create_board(
+        board = self.repo.create_board(
             dto.title, dto.writer, dto.contents, dto.password
         )
-        if not is_created:
+        if not board:
             return UseCaseFailureOutput(FailureType.INTERNAL_ERROR, "create board fail")
+
+        notify_keyword_contents("board", board.contents, board.id)
 
         return UseCaseSuccessOutput(value=True)
