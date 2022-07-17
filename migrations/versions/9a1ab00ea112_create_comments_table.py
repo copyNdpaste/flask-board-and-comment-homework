@@ -23,8 +23,8 @@ def upgrade():
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("contents", sa.String(length=1000), nullable=False),
         sa.Column("writer", sa.String(length=30), nullable=False),
-        sa.Column("created_at", sa.String(length=10), nullable=False),
-        sa.Column("parent_id", sa.Integer(), nullable=False),
+        sa.Column("created_at", sa.String(length=30), nullable=False),
+        sa.Column("parent_id", sa.Integer(), nullable=True),
         sa.Column("board_id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(
             ["board_id"],

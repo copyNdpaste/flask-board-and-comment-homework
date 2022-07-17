@@ -1,30 +1,29 @@
 import inject
 
-from core.dto.board_dto import CreateBoardDto
+from core.dto.comment_dto import CreateCommentDto
 from core.repository.repository import Repository
 from core.usecase_output import UseCaseSuccessOutput, UseCaseFailureOutput, FailureType
 
 
-class CreateBoardUseCase:
+class CreateCommentUseCase:
     @inject.autoparams()
     def __init__(self, repo: Repository):
         self.repo = repo
 
-    def execute(self, dto: CreateBoardDto):
+    def execute(self, dto: CreateCommentDto):
         if (
-            not dto.title
-            or not dto.writer
+            not dto.writer
             or not dto.contents
-            or not dto.password
+            or not dto.board_id
         ):
             return UseCaseFailureOutput(
                 FailureType.INVALID_REQUEST_ERROR, "please check input values"
             )
 
-        is_created = self.repo.create_board(
-            dto.title, dto.writer, dto.contents, dto.password
+        is_created = self.repo.create_comment(
+            dto.board_id, dto.writer, dto.contents, dto.parent_id
         )
         if not is_created:
-            return UseCaseFailureOutput(FailureType.INTERNAL_ERROR, "create board fail")
+            return UseCaseFailureOutput(FailureType.INTERNAL_ERROR, "create comment fail")
 
         return UseCaseSuccessOutput(value=True)

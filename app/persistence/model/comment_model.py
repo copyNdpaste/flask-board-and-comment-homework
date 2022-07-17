@@ -21,7 +21,7 @@ class CommentModel(db.Model):
     writer = Column(String(30), nullable=False)
     parent_id = Column(Integer(), ForeignKey("comments.id"), nullable=True)
     board_id = Column(Integer(), ForeignKey(BoardModel.id), nullable=False)
-    created_at = Column(String(10), default=get_utc_timestamp(), nullable=False)
+    created_at = Column(String(30), default=get_utc_timestamp(), nullable=False)
 
     board = relationship("BoardModel", backref="comments")
     parent = relationship("CommentModel", remote_side=[id], backref="child")

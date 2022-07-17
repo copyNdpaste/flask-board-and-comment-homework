@@ -18,8 +18,8 @@ class BoardModel(db.Model):
     contents = Column(String(10000), nullable=False)
     writer = Column(String(30), nullable=False)
     password = Column(String(10), nullable=False)
-    created_at = Column(String(10), default=get_utc_timestamp(), nullable=False)
-    updated_at = Column(String(10), default=get_utc_timestamp(), nullable=False)
+    created_at = Column(String(30), default=get_utc_timestamp(), nullable=False)
+    updated_at = Column(String(30), default=get_utc_timestamp(), nullable=False)
 
     def to_entity(self) -> BoardEntity:
         return BoardEntity(

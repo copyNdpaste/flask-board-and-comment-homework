@@ -25,8 +25,8 @@ def upgrade():
         sa.Column("contents", sa.String(length=10000), nullable=False),
         sa.Column("writer", sa.String(length=30), nullable=False),
         sa.Column("password", sa.String(length=10), nullable=False),
-        sa.Column("created_at", sa.String(length=10), nullable=False),
-        sa.Column("updated_at", sa.String(length=10), nullable=False),
+        sa.Column("created_at", sa.String(length=30), nullable=False),
+        sa.Column("updated_at", sa.String(length=30), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_boards_title"), "boards", ["title"], unique=False)
