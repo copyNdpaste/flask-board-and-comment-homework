@@ -1,10 +1,10 @@
+from datetime import datetime
 from typing import Union
 
 from sqlalchemy import and_
 
 from app.extensions.database import session
 from app.extensions.utils.log_helper import logger_
-from app.extensions.utils.time_helper import get_utc_timestamp
 from app.persistence.model.board_model import BoardModel
 from app.persistence.model.comment_model import CommentModel
 from app.persistence.model.keyword_model import KeywordModel
@@ -80,7 +80,7 @@ class Repository:
                 {
                     "title": title,
                     "contents": contents,
-                    "updated_at": get_utc_timestamp(),
+                    "updated_at": datetime.utcnow(),
                 }
             )
 

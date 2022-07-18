@@ -17,6 +17,10 @@ class CreateCommentUseCase:
                 FailureType.INVALID_REQUEST_ERROR, "please check input values"
             )
 
+        board = self.repo.get_board(id=dto.board_id)
+        if not board:
+            return UseCaseFailureOutput(FailureType.NOT_FOUND_ERROR, "board not found")
+
         comment = self.repo.create_comment(
             dto.board_id, dto.writer, dto.contents, dto.parent_id
         )

@@ -12,6 +12,8 @@ class DeleteBoardUseCase:
 
     def execute(self, dto: DeleteBoardDto):
         board = self.repo.get_board(id=dto.id)
+        if not board:
+            return UseCaseFailureOutput(FailureType.NOT_FOUND_ERROR, "board not found")
         if board.password != dto.password:
             return UseCaseFailureOutput(
                 FailureType.UNAUTHORIZED_ERROR, "please check password"

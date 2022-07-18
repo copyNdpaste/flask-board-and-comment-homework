@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import (
     Column,
     Integer,
@@ -7,7 +9,6 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 from app import db
-from app.extensions.utils.time_helper import get_utc_timestamp
 from app.persistence.model.board_model import BoardModel
 
 from core.entity.comment_entity import CommentEntity
@@ -21,7 +22,7 @@ class CommentModel(db.Model):
     writer = Column(String(30), nullable=False)
     parent_id = Column(Integer(), ForeignKey("comments.id"), nullable=True)
     board_id = Column(Integer(), ForeignKey(BoardModel.id), nullable=False)
-    created_at = Column(String(30), default=get_utc_timestamp(), nullable=False)
+    created_at = Column(String(30), default=datetime.utcnow, nullable=False)
 
     board = relationship("BoardModel", backref=backref("comments", cascade="delete"))
     parent = relationship("CommentModel", remote_side=[id], backref="child")
