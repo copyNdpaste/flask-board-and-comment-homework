@@ -40,7 +40,6 @@ class Repository:
             return board.to_entity() if board else None
         except Exception as e:
             logger.error(f"[Repository][get_board] error : {e}")
-            session.rollback()
             return False
 
     def get_boards(self, id, writer, title) -> Union[list[BoardEntity], bool]:
@@ -71,7 +70,7 @@ class Repository:
 
             return [board.to_entity() for board in boards] if boards else []
         except Exception as e:
-            logger.error(f"[Repository][get_board] error : {e}")
+            logger.error(f"[Repository][get_boards] error : {e}")
             return False
 
     def update_board(self, id, title, contents) -> bool:
